@@ -42,3 +42,6 @@ cobbler system edit --name=testpxeclient --profile=sles15sp1_cobbler --mac-addre
 
 #Instead of using pxe tftp it is also a good practice to create the boot-iso for the client with profiles and prepared pxeclients added and let the client system boot this iso. You will get the select options for which profile or client you want to choose and the installation will start.
 cobbler buildiso --profiles="sles15sp1_good test-sles15sp1:1:bosuse"
+
+#And last but not least I want to bootstrap the sles into suse manager by giving an activationkey as parameter. First I add the parameter as autoinstall-meta and use the new parameter "activationkey" in the bootstrap shell script. So I can keep the bootstrap script as one file but can be used for different sles installations with different activation-keys.
+cobbler system edit --name=testpxeclient --autoinstall-meta="activationkey=1-sles15sp1"
