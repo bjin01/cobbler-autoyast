@@ -1,0 +1,44 @@
+#Add a distro with the ISO file mounted somewhere. The path for kernel and initrd have to be absolute path.
+cobbler distro add --name=sles15sp1_86_64 --kernel=/srv/www/htdocs/pub/iso/sles15sp1/boot/x86_64/loader/linux --initrd=/srv/www/htdocs/pub/iso/sles15sp1/boot/x86_64/loader/initrd 
+
+#And of course do not forget to add the kernel-option and add the install parameter so that the pxeclient can find the installation CD :-)
+cobbler distro edit --name=sles15sp1_86_64 --kernel-options="install=http://192.168.122.181/pub/iso/sles15sp1" --breed=suse
+
+#after distro now create a profile with the distro associated and of course also provide the autoyast.xml This autoyast.xml file must reside /var/lib/cobbler/tempates/ directory.
+cobbler profile add --name=sles15sp1qu1 --distro=sles15sp1_86_64 --autoinstall=sle15.xml 
+
+#If you want to see the content of the autoyast file and variable values used through placeholders e.g. $hostname 
+cobbler profile get-autoinstall --name=sles15sp1qu1 
+
+#to modify existing profiles do so:
+cobbler profile edit --name=sles15sp1qu1 --distro=sles15sp1_86_64 --autoinstall=sle15.xml 
+
+#now is time to add some repos which will be needed for during the autoyasta installation as add-on. Especially sles15 would need the packages DVD in order to install other modules.
+cobbler repo add --name=sle15sp1_module_basesystem --mirror=http://bjsuma.bo2go.home/pub/iso/sle15sp1packages/Module-Basesystem --keep-updated=N --mirror-locally=N --comment=sle-module-basesystem 
+cobbler repo add --name=sle15sp1_module_server_applications --mirror=http://bjsuma.bo2go.home/pub/iso/sle15sp1packages/Module-Server-Applications -updated=N --mirror-locally=N --comment=sle-module-server-applications 
+cobbler repo add --name=sle15sp1_module_server_applications --mirror=http://bjsuma.bo2go.home/pub/iso/sle15sp1packages/Module-Server-Applications --keep-updated=N --mirror-locally=N --comment=sle-module-server-applications 
+cobbler repo list 
+
+#see all details of the repo
+cobbler repo report --name=sle15sp1_module_basesystem 
+
+#in order to create or prepare a new pxe client for the autoyast installation through cobbler we have to create the system and give some parameters. More parameters can be added afterwards as well.
+cobbler system add --name=testpxeclient --profile=sles15sp1qu1 --mac-address=52:54:00:e8:71:ca --interface=eth0 --ip-address=192.168.122.141 --netmask=255.255.255.0 --static=1 --dns-name=192.168.122.1
+
+#for example here we add more parameters which will be referenced by $SNIPPET('networking.xml') from /var/lib/cobbler/snippets/ directory.
+cobbler system edit --name=testpxeclient --profile=sles15sp1_cobbler --mac-address=52:54:00:e8:71:ca --interface=eth0 --ip-address=192.168.122.141 --netmask=255.255.255.0 --static=1 --dns-name=testpxeclient.bo2go.home --hostname=testpxeclient.bo2go.home --gateway=192.168.122.1 --name-servers="192.168.122.1 8.8.8.8" --kernel-options-post="elevator=noop" 
+
+#another example
+cobbler system edit --name=testpxeclient --profile=sles15sp1_cobbler --mac-address=52:54:00:e8:71:ca --interface=eth0 --ip-address=192.168.122.141 --netmask=255.255.255.0 --static=1 --dns-name=testpxeclient.bo2go.home --hostname=testpxeclient.bo2go.home --gateway=192.168.122.1 --name-servers="192.168.122.1 8.8.8.8" --kernel-options-post="elevator=noop" --netboot-enabled=1 
+
+#don't forget to add the repos to the profile. I need this because I use a $SNIPPET('add-on.xml') in my autoyast.xml file which will add the repos to the autoyast file.
+cobbler profile edit --name=sles15sp1_cobbler --repos="sle15sp1_module_basesystem sle15sp1_module_server_applications" 
+
+#It is a good practice to review the parameters of the prepared pxe client in cobbler using below command
+cobbler system get-autoinstall --name=testpxeclient 
+
+#There is a parameter '--netboot-enabled=1' which I set to 1 to allow this pxe client to boot from network and get this profile to install, but I also use this command to disable netboot so that the pxeclient will not get this profile anymore but boot from local. This is the case if the pxeclient firmware is using pxeboot as first option.
+cobbler system edit --name=testpxeclient --profile=sles15sp1_cobbler --mac-address=52:54:00:e8:71:ca --interface=eth0 --ip-address=192.168.122.141 --netmask=255.255.255.0 --static=1 --dns-name=testpxeclient.bo2go.home --hostname=testpxeclient.bo2go.home --gateway=192.168.122.1 --name-servers="192.168.122.1 8.8.8.8" --kernel-options-post="elevator=noop" --netboot-enabled=1 
+
+#Instead of using pxe tftp it is also a good practice to create the boot-iso for the client with profiles and prepared pxeclients added and let the client system boot this iso. You will get the select options for which profile or client you want to choose and the installation will start.
+cobbler buildiso --profiles="sles15sp1_good test-sles15sp1:1:bosuse"

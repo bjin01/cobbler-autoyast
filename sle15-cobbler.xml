@@ -1,0 +1,143 @@
+<!DOCTYPE profile>
+<profile xmlns="http://www.suse.com/1.0/yast2ns" xmlns:config="http://www.suse.com/1.0/configns">
+  $SNIPPET('addons.xml')
+  <deploy_image>
+    <image_installation config:type="boolean">false</image_installation>
+  </deploy_image>
+  <general>
+    <ask-list config:type="list"/>
+    <mode>
+      <confirm config:type="boolean">false</confirm>
+      <final_halt config:type="boolean">false</final_halt>
+      <final_reboot config:type="boolean">false</final_reboot>
+      <halt config:type="boolean">false</halt>
+      <second_stage config:type="boolean">true</second_stage>
+    </mode>
+    <proposals config:type="list"/>
+    <signature-handling>
+      <accept_file_without_checksum config:type="boolean">true</accept_file_without_checksum>
+      <accept_non_trusted_gpg_key config:type="boolean">true</accept_non_trusted_gpg_key>
+      <accept_unknown_gpg_key config:type="boolean">true</accept_unknown_gpg_key>
+      <accept_unsigned_file config:type="boolean">false</accept_unsigned_file>
+      <accept_verification_failed config:type="boolean">false</accept_verification_failed>
+      <import_gpg_key config:type="boolean">true</import_gpg_key>
+    </signature-handling>
+    <storage/>
+  </general>
+  <groups config:type="list"/>
+  <login_settings/>
+  $SNIPPET('networking.xml')
+  <partitioning config:type="list">
+    <drive>
+      <device>/dev/vda</device>
+      <disklabel>msdos</disklabel>
+      <enable_snapshots config:type="boolean">true</enable_snapshots>
+      <initialize config:type="boolean">true</initialize>
+      <partitions config:type="list">
+        <partition>
+          <create config:type="boolean">true</create>
+          <crypt_fs config:type="boolean">false</crypt_fs>
+          <filesystem config:type="symbol">swap</filesystem>
+          <format config:type="boolean">true</format>
+          <fstopt>defaults</fstopt>
+          <loop_fs config:type="boolean">false</loop_fs>
+          <mount>swap</mount>
+          <mountby config:type="symbol">uuid</mountby>
+          <partition_id config:type="integer">130</partition_id>
+          <partition_nr config:type="integer">1</partition_nr>
+          <resize config:type="boolean">false</resize>
+          <size>2145549824</size>
+        </partition>
+        <partition>
+          <create config:type="boolean">true</create>
+          <crypt_fs config:type="boolean">false</crypt_fs>
+          <filesystem config:type="symbol">ext3</filesystem>
+          <format config:type="boolean">true</format>
+          <fstopt>defaults</fstopt>
+          <loop_fs config:type="boolean">false</loop_fs>
+          <mount>/</mount>
+          <mountby config:type="symbol">uuid</mountby>
+          <partition_id config:type="integer">131</partition_id>
+          <partition_nr config:type="integer">2</partition_nr>
+          <resize config:type="boolean">false</resize>
+          <size>max</size>
+	</partition>
+      </partitions>
+      <pesize/>
+      <type config:type="symbol">CT_DISK</type>
+      <use>all</use>
+    </drive>
+  </partitioning>
+  <services-manager>
+      <!--default_target>graphical</default_target-->
+    <services>
+      <disable config:type="list"/>
+         <enable config:type="list">
+             <service>sshd</service>
+         </enable>
+    </services>
+  </services-manager>
+  <software>
+    <products config:type="list">
+     <product>SLES</product>
+    </products>
+    <patterns config:type="list">
+      <pattern>base</pattern>
+      <pattern>yast2_basis</pattern>
+    </patterns>
+    <packages config:type="list">
+      <package>openssh</package>
+      <package>vim</package>
+      <package>chrony</package>
+      <package>patch</package>
+      <package>autoyast2</package>
+      <package>autoyast2-installation</package>
+    </packages>
+  </software>
+  <timezone>
+    <hwclock>UTC</hwclock>
+    <timezone>Europe/Vienna</timezone>
+  </timezone>
+  <user_defaults>
+    <expire/>
+    <group>100</group>
+    <groups/>
+    <home>/home</home>
+    <inactive>-1</inactive>
+    <no_groups config:type="boolean">true</no_groups>
+    <shell>/bin/bash</shell>
+    <skel>/etc/skel</skel>
+    <umask>022</umask>
+  </user_defaults>
+  <users config:type="list">
+    <user>
+      <encrypted config:type="boolean">false</encrypted>
+      <user_password>test</user_password>
+      <username>hauser</username>
+    </user>
+    <user>
+      <encrypted config:type="boolean">false</encrypted>
+      <user_password>test</user_password>
+      <username>root</username>
+    </user>
+  </users>
+  <scripts>
+    <init-scripts config:type="list">
+      <script>
+        <debug config:type="boolean">true</debug>
+        <filename>loginAndFormat.sh</filename>
+        <location><![CDATA[]]></location>
+		<source><![CDATA[mkdir -p /root/.ssh/
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAxptCULASmSoiH9PmdqmVhSuGJZU7Tnt0OlacVqqHZCyT9wkWlbykwod2xvtOgOw8By0rcjB34XFHVyvVBnXw7Kg6nL5AI0Qaabhs34jUCnUz9m7yf8G9G9yLCgwc3EBa7JXhBHQ4oFyPJf1e5aNTVetJ0HX+VqJvAx3tQPCq0BogT51nb2CTxTARt97+BhK0tVa9gIP+YuWRe7uqyBqTxixqzI5rlGMwSyaTrx5I/laKHQL6vb00fJegmmDvFZQ+N01nWq4v2zQqgXyAzVxwXlraLTvATDeoAm4U++HY1r0lrgmp91a12ddiLbl54lgsy4DxpEkBPKv2gJpu1k3D root@bjsuma" >> /root/.ssh/authorized_keys]]></source>
+      </script>
+      <script>
+        <debug config:type="boolean">true</debug>
+        <filename>enableSecondNICIfExist.sh</filename>
+        <location><![CDATA[]]></location>
+		<source><![CDATA[echo "BOOTPROTO='dhcp'\nSTARTMODE='auto'" >> /etc/sysconfig/network/ifcfg-eth1
+chmod 0644 /etc/sysconfig/network/ifcfg-eth1
+rcwicked restart]]></source>
+      </script>
+    </init-scripts>
+  </scripts>
+</profile>

@@ -1,0 +1,10 @@
+#!/bin/bash
+myfqdn=$getVar('dns_name_eth0','')
+myip=$getVar('ip_address_eth0','')
+mysysname=$getVar('system_name','')
+if [[ $myip && $myfqdn && $mysysname ]]
+    then
+        echo "$myip $myfqdn $mysysname" >> /etc/hosts
+    else
+        echo "Error"
+fi
