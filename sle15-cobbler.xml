@@ -1,6 +1,6 @@
 <!DOCTYPE profile>
 <profile xmlns="http://www.suse.com/1.0/yast2ns" xmlns:config="http://www.suse.com/1.0/configns">
-  $SNIPPET('addons.xml')
+  $SNIPPET('addons.xml') 
   <deploy_image>
     <image_installation config:type="boolean">false</image_installation>
   </deploy_image>
@@ -90,6 +90,9 @@
       <package>vim</package>
       <package>chrony</package>
       <package>patch</package>
+      <package>iputils</package>
+      <package>wget</package>
+      <package>man</package>
       <package>autoyast2</package>
       <package>autoyast2-installation</package>
     </packages>
@@ -123,6 +126,8 @@
   </users>
   <scripts>
     <init-scripts config:type="list">
+      #set global $wrappedscript = 'bosample'
+      $SNIPPET('suse_scriptwrapper.xml')
       <script>
         <debug config:type="boolean">true</debug>
         <filename>loginAndFormat.sh</filename>
@@ -138,6 +143,8 @@ echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAxptCULASmSoiH9PmdqmVhSuGJZU7Tnt0Ol
 chmod 0644 /etc/sysconfig/network/ifcfg-eth1
 rcwicked restart]]></source>
       </script>
+      #set global $wrappedscript = 'bootstrap-salt'
+      $SNIPPET('suse_scriptwrapper.xml')
     </init-scripts>
   </scripts>
 </profile>
