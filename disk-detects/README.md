@@ -1,4 +1,4 @@
-#Detect block devices and show disk list as ask dialog in autoyast
+# Detect block devices and show disk list as ask dialog in autoyast
 
 There is a pre-script that 
 1. wget - download the bash script from a install server or SUSE Manager host to the yast installer system.
