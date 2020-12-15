@@ -1,0 +1,384 @@
+<!DOCTYPE profile>
+<profile xmlns="http://www.suse.com/1.0/yast2ns" xmlns:config="http://www.suse.com/1.0/configns">
+  <add-on>
+    <add_on_products config:type="list">
+      <listentry>
+        <media_url>http://192.168.122.181/pub/iso/sle15sp1packages/</media_url>
+        <product>sle-module-basesystem</product>
+        <product_dir>/Module-Basesystem</product_dir>
+      </listentry>
+      <listentry>
+        <media_url>http://192.168.122.181/pub/iso/sle15sp1packages/</media_url>
+        <product>sle-module-server-applications</product>
+        <product_dir>/Module-Server-Applications</product_dir>
+      </listentry>
+      <listentry>
+        <media_url>http://192.168.122.181/pub/iso/sle15sp1packages/</media_url>
+        <product>sle-module-containers</product>
+        <product_dir>/Module-Containers</product_dir>
+      </listentry>
+      <listentry>
+        <media_url>http://192.168.122.181/pub/iso/sle15sp1packages/</media_url>
+        <product>sle-module-web-scripting</product>
+        <product_dir>/Module-Web-Scripting</product_dir>
+      </listentry>
+    </add_on_products>
+  </add-on>
+  <bootloader>
+    <global>
+      <cpu_mitigations>off</cpu_mitigations>
+      <append>elevator=noop</append>
+      <gfxmode>auto</gfxmode>
+      <boot_mbr>false</boot_mbr>
+      <hiddenmenu>false</hiddenmenu>
+      <os_prober>false</os_prober>
+      <terminal>gfxterm</terminal>
+      <timeout config:type="integer">2</timeout>
+      <xen_kernel_append>vga=gfx-1024x768x16</xen_kernel_append>
+    </global>
+    <loader_type>grub2-efi</loader_type>
+  </bootloader>
+  <deploy_image>
+    <image_installation config:type="boolean">false</image_installation>
+  </deploy_image>
+  <general>
+     <self_update config:type="boolean">false</self_update>
+     <ask-list config:type="list">
+      <ask>
+        <path>networking,dns,hostname</path>
+        <default></default>
+        <dialog config:type="integer">0</dialog>
+        <element config:type="integer">1</element>
+        <frametitle>hostname</frametitle>
+        <question>enter hostname please.</question>
+        <script/>
+        <stage>initial</stage>
+        <title/>
+      </ask>
+      <ask>
+        <default></default>
+        <dialog config:type="integer">0</dialog>
+        <element config:type="integer">2</element>
+        <frametitle>activation key</frametitle>
+        <question>Select the activation key</question>
+        <default_value_script>
+          <source><![CDATA[
+            echo -n "1-${activationkey}"
+              ]]>
+          </source>
+      </default_value_script>
+        <stage>initial</stage>
+        <title/>
+      </ask>
+      <ask>                                                                                                                                                   
+        <path>scripts,init-scripts,2,location</path>                                                                                                          
+        <default/>                                                                                                                                            
+        <dialog config:type="integer">0</dialog>                                                                                                              
+        <element config:type="integer">3</element>                                                                                                            
+        <frametitle>client type</frametitle>                                                                                                                  
+        <question>Select client agent type</question>                                                                                                         
+        <stage>initial</stage>                                                                                                                                
+        <title/>                                                                                                                                              
+        <selection config:type="list">                                                                                                                        
+          <entry>                                                                                                                                             
+            <value>bootstrap-${activationkey}.sh</value>                                                                                                                                          
+            <label>salt-minion</label>                                                                                                                                          
+          </entry>                                                                                                                                             
+          <entry>
+            <value>bootstrap-${activationkey}.sh</value>
+            <label>spacewalk-client</label>
+           </entry>
+          </selection>
+          <script>
+        <filename>test.sh</filename>
+        <environment config:type="boolean">true</environment>
+        <source>
+<![CDATA[
+wget http://192.168.122.181/pub/bootstrap/$VAL -O /tmp/$VAL 2>/dev/null
+echo -n "$VAL"
+
+]]>
+        </source>
+        </script>
+        <file>/tmp/answer_file</file>
+        </ask>
+        <ask>                                                  
+        <default/>                                                                                                                                            
+        <dialog config:type="integer">0</dialog>                                                                                                              
+        <element config:type="integer">4</element>                                                                                                            
+        <frametitle>server role</frametitle>                                                                                                                  
+        <question>Select server role</question>                                                                                                         
+        <stage>initial</stage>                                                                                                                                
+        <title/>                                                                                                                                              
+        <selection config:type="list">                                                                                                                        
+          <entry>                                                                                                                                             
+            <value>mariadb</value>                                                                                                                                          
+            <label>DB Server</label>                                                                                                                                          
+          </entry>                                                                                                                                             
+          <entry>
+            <value>0815</value>
+            <label>general</label>
+           </entry>
+          </selection>
+          <script>
+        <filename>grains.sh</filename>
+        <environment config:type="boolean">true</environment>
+        <source>
+<![CDATA[
+cat <<EOF >>/tmp/grains.txt
+$VAL
+EOF
+]]>
+        </source>
+        </script>
+        <file>/tmp/answer_file</file>
+        </ask>
+    </ask-list>
+    <mode>
+      <confirm config:type="boolean">false</confirm>
+      <final_halt config:type="boolean">false</final_halt>
+      <final_reboot config:type="boolean">false</final_reboot>
+      <halt config:type="boolean">false</halt>
+      <second_stage config:type="boolean">true</second_stage>
+    </mode>
+    <proposals config:type="list"/>
+    <signature-handling>
+      <accept_file_without_checksum config:type="boolean">true</accept_file_without_checksum>
+      <accept_non_trusted_gpg_key config:type="boolean">true</accept_non_trusted_gpg_key>
+      <accept_unknown_gpg_key config:type="boolean">true</accept_unknown_gpg_key>
+      <accept_unsigned_file config:type="boolean">false</accept_unsigned_file>
+      <accept_verification_failed config:type="boolean">false</accept_verification_failed>
+      <import_gpg_key config:type="boolean">true</import_gpg_key>
+    </signature-handling>
+    <storage>
+        <start_multipath config:type="boolean">true</start_multipath>
+    </storage>
+  </general>
+  <groups config:type="list"/>
+  <login_settings/>
+  <networking>
+    <dns>
+      <dhcp_hostname config:type="boolean">false</dhcp_hostname>
+      <hostname>testnode1</hostname>
+      <nameservers config:type="list">
+        <nameserver>192.168.122.1</nameserver>
+        <nameserver>8.8.8.8</nameserver>
+      </nameservers>
+      <resolv_conf_policy>auto</resolv_conf_policy>
+      <write_hostname config:type="boolean">false</write_hostname>
+    </dns>
+    <interfaces config:type="list">
+        <interface>
+        <bootproto>dhcp</bootproto>
+        <device>eth0</device>
+        <startmode>auto</startmode>
+        </interface>
+    </interfaces>
+    <ipv6 config:type="boolean">false</ipv6>
+    <keep_install_network config:type="boolean">false</keep_install_network>
+    <managed config:type="boolean">false</managed>
+    <routing>
+      <ipv4_forward config:type="boolean">false</ipv4_forward>
+      <ipv6_forward config:type="boolean">false</ipv6_forward>
+    </routing>
+  </networking>
+  <partitioning config:type="list">
+    <drive>
+      <device>/dev/aaa</device>
+      <disklabel>gpt</disklabel>
+      <enable_snapshots config:type="boolean">true</enable_snapshots>
+      <initialize config:type="boolean">true</initialize>
+      <partitions config:type="list">
+        <partition>
+          <create config:type="boolean">true</create>
+          <filesystem config:type="symbol">vfat</filesystem>
+          <format config:type="boolean">true</format>
+          <mount>/boot/efi</mount>
+          <mountby config:type="symbol">uuid</mountby>
+          <partition_id config:type="integer">259</partition_id>
+          <partition_nr config:type="integer">1</partition_nr>
+          <partition_type>primary</partition_type>
+          <resize config:type="boolean">false</resize>
+          <size>8M</size>
+        </partition>
+        <partition>
+          <create config:type="boolean">true</create>
+          <crypt_fs config:type="boolean">false</crypt_fs>
+          <filesystem config:type="symbol">swap</filesystem>
+          <format config:type="boolean">true</format>
+          <fstopt>defaults</fstopt>
+          <loop_fs config:type="boolean">false</loop_fs>
+          <mount>swap</mount>
+          <mountby config:type="symbol">uuid</mountby>
+          <partition_id config:type="integer">130</partition_id>
+          <partition_nr config:type="integer">3</partition_nr>
+          <resize config:type="boolean">false</resize>
+          <size>2G</size>
+        </partition>
+        <partition>
+          <create config:type="boolean">true</create>
+          <crypt_fs config:type="boolean">false</crypt_fs>
+          <filesystem config:type="symbol">btrfs</filesystem>
+          <format config:type="boolean">true</format>
+          <fstopt>defaults</fstopt>
+          <loop_fs config:type="boolean">false</loop_fs>
+          <mount>/</mount>
+          <mountby config:type="symbol">uuid</mountby>
+          <partition_id config:type="integer">131</partition_id>
+          <partition_nr config:type="integer">2</partition_nr>
+          <resize config:type="boolean">false</resize>
+          <size>max</size>
+          <subvolumes config:type="list">
+            <path>tmp</path>
+            <path>opt</path>
+            <path>srv</path>
+            <path>var/crash</path>
+            <path>var/lock</path>
+            <path>var/run</path>
+            <path>var/tmp</path>
+            <path>var/spool</path>
+          </subvolumes>
+	    </partition>
+      </partitions>
+      <pesize/>
+      <type config:type="symbol">CT_DISK</type>
+      <use>all</use>
+    </drive>
+  </partitioning>
+  <services-manager>
+      <!--default_target>graphical</default_target-->
+    <services>
+      <disable config:type="list"/>
+         <enable config:type="list">
+             <service>sshd</service>
+         </enable>
+    </services>
+  </services-manager>
+  <software>
+    <products config:type="list">
+     <product>SLES</product>
+    </products>
+    <patterns config:type="list">
+      <pattern>base</pattern>
+      <pattern>yast2_basis</pattern>
+      <pattern>enhanced_base</pattern>
+    </patterns>
+    <packages config:type="list">
+      <package>openssh</package>
+      <package>vim</package>
+      <package>grub2-x86_64-efi</package>
+      <package>chrony</package>
+      <package>patch</package>
+      <package>autoyast2</package>
+      <package>autoyast2-installation</package>
+    </packages>
+  </software>
+  <timezone>
+    <hwclock>UTC</hwclock>
+    <timezone>Europe/Berlin</timezone>
+  </timezone>
+  <user_defaults>
+    <expire/>
+    <group>100</group>
+    <groups/>
+    <home>/home</home>
+    <inactive>-1</inactive>
+    <no_groups config:type="boolean">true</no_groups>
+    <shell>/bin/bash</shell>
+    <skel>/etc/skel</skel>
+    <umask>022</umask>
+  </user_defaults>
+  <users config:type="list">
+    <user>
+      <encrypted config:type="boolean">false</encrypted>
+      <user_password>test</user_password>
+      <username>hauser</username>
+    </user>
+    <user>
+      <encrypted config:type="boolean">false</encrypted>
+      <user_password>test</user_password>
+      <username>root</username>
+    </user>
+  </users>
+<scripts>
+  <pre-scripts config:type="list">
+    <script>
+        <interpreter>shell</interpreter>
+        <source>
+<![CDATA[
+wget http://192.168.122.181/pub/autoyast/disk.sh -O /tmp/disk.sh
+bash /tmp/disk.sh
+]]>
+        </source>
+    </script>
+  </pre-scripts>
+    <chroot-scripts config:type="list">
+      <script>
+        <chrooted config:type="boolean">false</chrooted>
+        <filename>cpscript.sh</filename>
+        <interpreter>shell</interpreter>
+        <source>
+<![CDATA[
+#!/bin/sh 
+echo "chroot script - copy all files to mnt-tmp" 
+cp /tmp/* /mnt/tmp/
+]]>
+        </source>
+      </script>
+    </chroot-scripts>
+    <post-scripts config:type="list">
+      <script>
+        <source><![CDATA[ 
+            echo "192.168.122.181 bjsuma.bo2go.home bjsuma" >> /etc/hosts
+            ping -c2 bjsuma >> /var/log/bjsuma.log     
+                 ]]>
+        </source>
+        <network_needed config:type="boolean">true</network_needed>
+      </script>
+    </post-scripts>
+    <init-scripts config:type="list">
+      <script>
+        <debug config:type="boolean">true</debug>
+        <filename>loginAndFormat.sh</filename>
+        <location><![CDATA[]]></location>
+		<source><![CDATA[mkdir -p /root/.ssh/
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAxptCULASmSoiH9PmdqmVhSuGJZU7Tnt0OlacVqqHZCyT9wkWlbykwod2xvtOgOw8By0rcjB34XFHVyvVBnXw7Kg6nL5AI0Qaabhs34jUCnUz9m7yf8G9G9yLCgwc3EBa7JXhBHQ4oFyPJf1e5aNTVetJ0HX+VqJvAx3tQPCq0BogT51nb2CTxTARt97+BhK0tVa9gIP+YuWRe7uqyBqTxixqzI5rlGMwSyaTrx5I/laKHQL6vb00fJegmmDvFZQ+N01nWq4v2zQqgXyAzVxwXlraLTvATDeoAm4U++HY1r0lrgmp91a12ddiLbl54lgsy4DxpEkBPKv2gJpu1k3D root@bjsuma" >> /root/.ssh/authorized_keys]]></source>
+      </script>
+      <script>
+      <filename>bjin-init.sh</filename>
+      <interpreter>shell</interpreter>
+      <source><![CDATA[
+         #!/bin/sh
+         echo "Running init-install script"
+         systemctl enable sshd.service
+         systemctl start sshd.service
+      ]]>
+      </source>
+    </script>
+    <script>
+       <interpreter>shell</interpreter>
+       <filename>bootstrap-${activationkey}.sh</filename>
+       <location>
+<![CDATA[
+http://192.168.122.181/pub/bootstrap/bootstrap-${activationkey}.sh
+]]>
+       </location>
+       <notification>Please wait while bootstrap script is running...</notification>
+       <feedback config:type="boolean">true</feedback>
+       <feedback_type>message</feedback_type>
+    </script>
+    <script>
+      <interpreter>shell</interpreter>
+      <filename>bootstrap-script.sh</filename>
+      <source><![CDATA[
+          #!/bin/sh
+          /bin/bash /tmp/bootstrap*.sh 2>> /tmp/bootstrap.log
+          ]]>
+      </source>
+      <notification>This is a test notification</notification>
+      <feedback config:type="boolean">true</feedback>
+      <feedback_type>message</feedback_type>
+     </script>
+    </init-scripts>
+  </scripts>
+</profile>
