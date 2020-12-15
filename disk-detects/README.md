@@ -14,3 +14,5 @@ This script has been tetsted on SLES15SP2 in conjunction with SUSE Manager 4.1.3
 The original idea is to use a such script to detect SAN LUNs which should be used for root disks.
 
 Feedbacks welcome.
+
+![ask dialog screenshot](https://github.com/bjin01/cobbler-autoyast/blob/master/disk-detects/disk-detect.png)
