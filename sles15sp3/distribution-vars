@@ -1,0 +1,1 @@
+install=http://192.168.122.181/ks/dist/sles15sp3 self_update=http://192.168.122.181/ks/dist/child/sle15-sp3-installer-updates-x86_64/sles15sp3

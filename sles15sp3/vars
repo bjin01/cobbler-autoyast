@@ -1,0 +1,14 @@
+org=1
+prefix=24
+fs_type=btrfs
+channel_prefix=
+redhat_management_server=192.168.122.181
+activationkey=sles15sp3
+network=192.168.122.0
+hostname=pxenode02.bo2go.home
+desktop=no
+netmask=255.255.255.0
+ptf_file=
+distrotree=sles15sp3
+ipaddr=192.168.122.202
+gateway=192.168.122.1
