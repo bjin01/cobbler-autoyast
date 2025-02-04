@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE profile>
+<profile xmlns="http://www.suse.com/1.0/yast2ns" xmlns:config="http://www.suse.com/1.0/configns">
+    <add-on>
+        <add_on_products config:type="list">
+            <listentry>
+                <ask_on_error config:type="boolean">true</ask_on_error>
+                <media_url>http://$redhat_management_server/ks/dist/child/$channel_prefix-sle-product-sles15-sp6-pool-x86_64/$distrotree</media_url>
+                <name>SLE-Product-SLES15-SP6-Pool for x86_64</name>
+                <product>SUSE Linux Enterprise Server 15 SP6 x86_64</product>
+                <product_dir>/</product_dir>
+            </listentry>
+            <listentry>
+                <ask_on_error config:type="boolean">true</ask_on_error>
+                <media_url>http://$redhat_management_server/ks/dist/child/$channel_prefix-sle-manager-tools15-pool-x86_64-sp6/$distrotree</media_url>
+                <name>SLE-Manager-Tools15-Pool for x86_64 SP6</name>
+                <product>SUSE Manager Client Tools for SLE 15 x86_64</product>
+                <product_dir>/</product_dir>
+            </listentry>
+            <listentry>
+                <ask_on_error config:type="boolean">true</ask_on_error>
+                <media_url>http://$redhat_management_server/ks/dist/child/$channel_prefix-sle-manager-tools15-updates-x86_64-sp6/$distrotree</media_url>
+                <name>SLE-Manager-Tools15-Updates for x86_64 SP6</name>
+                <product>SUSE Manager Client Tools for SLE 15 x86_64</product>
+                <product_dir>/</product_dir>
+            </listentry>
+            <listentry>
+                <ask_on_error config:type="boolean">true</ask_on_error>
+                <media_url>http://$redhat_management_server/ks/dist/child/$channel_prefix-sle-module-basesystem15-sp6-pool-x86_64/$distrotree</media_url>
+                <name>SLE-Module-Basesystem15-SP6-Pool for x86_64</name>
+                <product>Basesystem Module 15 SP6 x86_64</product>
+                <product_dir>/</product_dir>
+            </listentry>
+            <listentry>
+                <ask_on_error config:type="boolean">true</ask_on_error>
+                <media_url>http://$redhat_management_server/ks/dist/child/$channel_prefix-sle-module-basesystem15-sp6-updates-x86_64/$distrotree</media_url>
+                <name>SLE-Module-Basesystem15-SP6-Updates for x86_64</name>
+                <product>Basesystem Module 15 SP2 x86_64</product>
+                <product_dir>/</product_dir>
+            </listentry>
+            <listentry>
+                <ask_on_error config:type="boolean">true</ask_on_error>
+                <media_url>http://$redhat_management_server/ks/dist/child/$channel_prefix-sle-module-server-applications15-sp6-pool-x86_64/$distrotree</media_url>
+                <name>SLE-Module-Server-Applications15-SP6-Pool for x86_64</name>
+                <product>Server Applications Module 15 SP6 x86_64</product>
+                <product_dir>/</product_dir>
+            </listentry>
+            <listentry>
+                <ask_on_error config:type="boolean">true</ask_on_error>
+                <media_url>http://$redhat_management_server/ks/dist/child/$channel_prefix-sle-module-server-applications15-sp6-updates-x86_64/$distrotree</media_url>
+                <name>SLE-Module-Server-Applications15-SP6-Updates for x86_64</name>
+                <product>Server Applications Module 15 SP6 x86_64</product>
+                <product_dir>/</product_dir>
+            </listentry>
+            <listentry>
+                <ask_on_error config:type="boolean">true</ask_on_error>
+                <media_url>http://$redhat_management_server/ks/dist/child/$channel_prefix-sle-module-python3-15-sp6-pool-x86_64/$distrotree</media_url>
+                <name>SLE-Module-Python3-15-SP6-Pool for x86_64</name>
+                <product>Python 3 Module 15 SP6 x86_64</product>
+                <product_dir>/</product_dir>
+            </listentry>
+            <listentry>
+                <ask_on_error config:type="boolean">true</ask_on_error>
+                <media_url>http://$redhat_management_server/ks/dist/child/$channel_prefix-sle-module-python3-15-sp6-updates-x86_64/$distrotree</media_url>
+                <name>SLE-Module-Python3-15-SP6-Updates for x86_64</name>
+                <product>Python 3 Module 15 SP6 x86_64</product>
+                <product_dir>/</product_dir>
+            </listentry>
+        </add_on_products>
+    </add-on>
+    <bootloader>
+        <global>
+            <activate>true</activate>
+            <cpu_mitigations>auto</cpu_mitigations>
+            <gfxmode>auto</gfxmode>
+            <boot_mbr>false</boot_mbr>
+            <hiddenmenu>false</hiddenmenu>
+            <os_prober>false</os_prober>
+            <terminal>gfxterm</terminal>
+            <secure_boot>true</secure_boot>
+            <timeout config:type="integer">2</timeout>
+        </global>
+        <loader_type>grub2-efi</loader_type>
+    </bootloader>
+    <general>
+        <mode>
+            <confirm config:type="boolean">false</confirm>
+            <forceboot config:type="boolean">true</forceboot>
+            <final_reboot config:type="boolean">true</final_reboot>    
+        </mode>
+    </general>
+    <partitioning config:type="list">
+        <drive>
+            <type t="symbol">CT_DISK</type>
+            <device>/dev/sda</device>
+            <partitions config:type="list">
+                <partition>
+                    <create t="boolean">true</create>
+                    <filesystem t="symbol">vfat</filesystem>
+                    <format t="boolean">true</format>
+                    <fstopt>utf8</fstopt>
+                    <mount>/boot/efi</mount>
+                    <mountby t="symbol">uuid</mountby>
+                    <partition_id t="integer">259</partition_id>
+                    <partition_nr t="integer">1</partition_nr>
+                    <resize t="boolean">false</resize>
+                    <size>536870912</size>
+                </partition>
+                <partition>
+                    <lvm_group>systemVG</lvm_group>
+                    <partition_type>primary</partition_type>
+                    <partition_id t="integer">142</partition_id>
+                    <partition_nr t="integer">2</partition_nr>
+                    <resize t="boolean">false</resize>
+                    <size>49G</size>
+                </partition>
+            </partitions>
+        </drive>
+        <drive>
+            <device>/dev/systemVG</device>
+            <type config:type="symbol">CT_LVM</type>
+            <partitions config:type="list">
+                <partition>
+                    <filesystem config:type="symbol">ext4</filesystem>
+                    <lv_name>root</lv_name>
+                    <mount>/</mount>
+                    <size>20G</size>
+                </partition>
+                <partition>
+                    <filesystem config:type="symbol">ext4</filesystem>
+                    <lv_name>tmp</lv_name>
+                    <mount>/tmp</mount>
+                    <size>4G</size>
+                </partition>
+                <partition>
+                    <filesystem config:type="symbol">ext4</filesystem>
+                    <lv_name>var</lv_name>
+                    <mount>/var</mount>
+                    <size>10G</size>
+                </partition>
+                <partition>
+                    <filesystem config:type="symbol">ext4</filesystem>
+                    <lv_name>varlog</lv_name>
+                    <mount>/var/log</mount>
+                    <size>10G</size>
+                </partition>
+                <partition>
+                    <filesystem config:type="symbol">swap</filesystem>
+                    <lv_name>swap</lv_name>
+                    <mount>swap</mount>
+                    <size>2G</size>
+                </partition>
+            </partitions>
+            <pesize>4M</pesize>
+            <use>all</use>
+        </drive>
+    </partitioning>
+    <keyboard t="map">
+        <keymap>german-ch</keymap>
+    </keyboard>
+    <ntp-client t="map">
+        <ntp_policy>auto</ntp_policy>
+        <ntp_servers t="list">
+            <ntp_server t="map">
+                <address>160.63.91.5</address>
+                <iburst t="boolean">true</iburst>
+                <offline t="boolean">false</offline>
+            </ntp_server>
+            <ntp_server t="map">
+                <address>160.63.96.90</address>
+                <iburst t="boolean">true</iburst>
+                <offline t="boolean">false</offline>
+            </ntp_server>
+        </ntp_servers>
+        <ntp_sync>systemd</ntp_sync>
+    </ntp-client>
+    <firewall>
+        <enable_firewall config:type="boolean">true</enable_firewall>
+        <start_firewall t="boolean">true</start_firewall>
+        <log_denied_packets>all</log_denied_packets>
+        <default_zone>public</default_zone>
+        <zones config:type="list">
+            <zone>
+                <name>public</name>
+                <interfaces config:type="list">
+                    <interface>eth0</interface>
+                </interfaces>
+                <services config:type="list">
+                    <service>ssh</service>
+                    <service>dhcp</service>
+                    <service>dhcpv6</service>
+                    <service>samba</service>
+                    <service>vnc-server</service>
+                </services>
+                <ports config:type="list">
+                    <port>21/udp</port>
+                    <port>22/udp</port>
+                    <port>80/tcp</port>
+                    <port>443/tcp</port>
+                    <port>8080/tcp</port>
+                </ports>
+            </zone>
+        </zones>
+    </firewall>
+    <software>
+        <packages config:type="list">
+            <!-- Use salt bundle by default, uncomment salt-minion if needed -->
+            <package>venv-salt-minion</package>
+            <!--<package>salt-minion</package> -->
+        </packages>
+        <patterns config:type="list">
+            <pattern>base</pattern>
+            <pattern>enhanced_base</pattern>
+            <pattern>documentation</pattern>
+        </patterns>
+        <products config:type="list">
+            <listentry>SLES</listentry>
+        </products>
+    </software>
+
+    <users config:type="list">
+        <user>
+            <username>admin</username>
+            <user_password>$y$j9T$.hashedpassword</user_password>
+            <fullname>Administrator</fullname>
+            <encrypted config:type="boolean">true</encrypted>
+            <authorized_keys config:type="list">
+                <listentry>ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwLgzvfud3ELjHcbgWP2Gstu/EkMU5zOLswqOHbKPTM9zEwcWezPX3rGnoJfUMQ01IqQvs+Cp09qw5fTMIsU3UsHKVcVBrVLKUpRw9x7MyQVLf8aMZiEkU1pu/+7tUKhEq66RTM2rhGii5bLqrceus/gBBGRJgl8Cc/UTjA25m/zJDmIaiQBQnOrRfOi7gbGNM5vlsTxvhnM6TYvzlejNOTbqXM8BT+OfNTxmiKaTv8s1SWZwEwkFbDe9xeH6GsI3XNqdw3flPovw1yodHDCeSmJkNkNi2AgLqQHwsi3Nwnc35YHgUD3Wrv2Q6kDIV5sp0tarUv9vo74Gp7375D1Vf kt\baa5199@C017367</listentry>
+            </authorized_keys>
+        </user>
+    </users>
+
+    <networking>
+        <interfaces config:type="list">
+            <interface>
+                <bootproto>static</bootproto>
+                <startmode>auto</startmode>
+                <device>eth0</device>
+                <ipaddr>$IP</ipaddr>
+                <prefixlen>24</prefixlen>
+            </interface>
+        </interfaces>
+        <dns>
+            <dhcp_hostname config:type="boolean">false</dhcp_hostname>
+            <hostname>$HOSTNAME</hostname>
+            <nameservers config:type="list">
+                <nameserver>10.61.55.18</nameserver>
+                <nameserver>10.61.55.6</nameserver>
+                <nameserver>10.61.55.12</nameserver>
+            </nameservers>
+            <resolv_conf_policy>auto</resolv_conf_policy>
+            <searchlist config:type="list">
+                <search>ksta.zh.ch</search>
+            </searchlist>
+        </dns>
+        <routing>
+            <ipv4_forward config:type="boolean">false</ipv4_forward>
+            <ipv6_forward config:type="boolean">false</ipv6_forward>
+            <routes config:type="list">
+                <route>
+                    <destination>default</destination>
+                    <device>eth0</device>
+                    <gateway>10.61.9.1</gateway>
+                </route>
+            </routes>
+        </routing>
+        <keep_install_network config:type="boolean">false</keep_install_network>
+    </networking>
+    <scripts>
+        <init-scripts config:type="list">
+            <script>
+                <filename>autoyast-init-script1.sh</filename>
+                <source>
+                <![CDATA[
+                    #!/bin/bash
+                    echo "Post-install script running"
+                    zypper ref && zypper -n up
+                    systemctl enable --now firewalld
+                    firewall-cmd --permanent --add-service=ssh
+                    firewall-cmd --reload
+                    # Register system to Uyuni
+                    curl -Sks https://sfd01232.ksta.zh.ch/pub/bootstrap/bootstrap-sles15sp6.sh | bash
+                ]]>
+                </source>
+            </script>
+        </init-scripts>
+    </scripts>
+</profile>
